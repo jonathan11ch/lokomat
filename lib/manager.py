@@ -5,17 +5,25 @@ import ecg_sensor as ECG
 import threading
 
 class Manager(object):
-	def __init__(self):
-		self.imu = IMU.ImuSensor(port = 'COM4', br = 9600)
-		self.ecg = ECG.EcgSensor(port = 'COM3')
+	def __init__(self, imu_port = 'COM4', ecg_port = 'COM3'):
+		
 		self.ECG_ON = False
 		self.IMU_ON = False
 		self.data = {'ecg': None, 'hr': None}
+		self.imu_port = imu_port
+		self.ecg_sensor = ecg_port
 
 
 	def set_sensors(self, ecg = True, imu = True):
+
 		self.ECG_ON = ecg
 		self.IMU_ON = imu
+		
+		if self.IMU_ON:
+			self.imu = IMU.ImuSensor(port = self.imu_port, br = 9600)
+		if self.ECG_ON:
+			self.ecg = ECG.EcgSensor(port = self.ecg_port)
+
 
 	def launch_sensors(self):
 		#launch imu thread

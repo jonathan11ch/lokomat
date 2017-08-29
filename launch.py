@@ -1,9 +1,9 @@
 import threading
-import lib.manager as manager
+import lib.manager as man
 
 
 def main():
-	manager = manager.Manager()
+	manager = man.Manager(imu_port = 'COM4')
 	
 	manager.set_sensors(ecg = False, imu = True)
 	manager.launch_sensors()
