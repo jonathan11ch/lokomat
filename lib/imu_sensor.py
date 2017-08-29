@@ -7,7 +7,7 @@ class ImuSensor(object):
 	def __init__(self, port = 'COM4', br = 9600):
 		self.port  = port 
 		self.baudrate = br 
-		self.serial = serial.serial(self.port, self.baudrate)
+		self.serial = serial.Serial(self.port, self.baudrate)
 		self.go_on = False
 		self.pause = True
 		self.data ={'x': None, 'y': None, 'z': None}
@@ -31,7 +31,7 @@ class ImuSensor(object):
 			
 			else:
 				time.sleep(1)
-				
+
 		self.serial.close()
 
 	def get_data():

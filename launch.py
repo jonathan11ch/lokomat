@@ -10,6 +10,7 @@ def main():
 	manager.play_sensors()
 	
 	for i in range(10):
+		manager.update_data()
 		d = manager.get_data()
 		print d
 
