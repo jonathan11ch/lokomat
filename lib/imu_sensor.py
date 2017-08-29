@@ -34,7 +34,7 @@ class ImuSensor(object):
 
 		self.serial.close()
 
-	def get_data():
+	def get_data(self):
 		return self.data
 
 	def pause(self):
