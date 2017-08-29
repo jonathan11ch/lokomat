@@ -138,7 +138,8 @@ class EcgSensor(sensors.sensor):
         *********************************************************************************************
         """
     def get_data(self):
-        return self.__data_temp
+        data = {'hr': self.__data_temp[5]}
+        return data 
 
 
 def main():
