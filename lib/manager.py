@@ -47,8 +47,13 @@ class Manager(object):
 	def update_data(self):
 		if self.ECG_ON:
 			ecg = self.ecg.get_data()
+		else:
+			ecg = None
+
 		if self.IMU_ON:
 			imu = self.imu.get_data()
+		else:
+			ecg = None
 
 		self.data = {'ecg': ecg, 'imu': imu }
 
