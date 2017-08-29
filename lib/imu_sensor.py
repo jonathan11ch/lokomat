@@ -4,13 +4,14 @@ import time
 import threading
 
 class ImuSensor(object):
-	def __init__(self, port = 'COM4', br = 9600):
+	def __init__(self, port = 'COM4', br = 9600, print_values = False):
 		self.port  = port 
 		self.baudrate = br 
 		self.serial = serial.Serial(self.port, self.baudrate)
 		self.go_on = False
 		self.pause = True
 		self.data ={'x': None, 'y': None, 'z': None}
+		self.PRINT = print_values
 
 	def process(self):
 		
@@ -20,12 +21,13 @@ class ImuSensor(object):
 					#adquire data
 					data = self.serial.readline()
 					data_split = data.split(',')
-					x = data_split[0]
-					y = data_split[1]
-					z = data_split[2]
+					x = float(data_split[0])
+					y = float(data_split[1])
+					z = float(data_split[2].rstrip('\r\n'))
+					if self.PRINT:
+						print(self.data)
 					self.data ={'x': x, 'y': y, 'z': z}
-					print(self.data)
-
+					
 				except:
 					print('no Imu data')
 			

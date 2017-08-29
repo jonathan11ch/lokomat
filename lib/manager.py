@@ -20,6 +20,7 @@ class Manager(object):
 		self.IMU_ON = imu
 		
 		if self.IMU_ON:
+			print 'imu created'
 			self.imu = IMU.ImuSensor(port = self.imu_port, br = 9600)
 		if self.ECG_ON:
 			self.ecg = ECG.EcgSensor(port = self.ecg_port)
@@ -27,9 +28,10 @@ class Manager(object):
 
 	def launch_sensors(self):
 		#launch imu thread
-		if self.IMU_ON:
+		if self.IMU_ON:	
 			self.imu.start()
 			threading.Thread(target = self.imu.process).start()
+			print 'imu started and launched' 
 		#launch ecg thread
 		if self.ECG_ON:
 			self.ecg.start()
@@ -39,9 +41,11 @@ class Manager(object):
 		#start acquiring data
 		if self.ECG_ON:
 			self.ecg.play()
+			 
 		
 		if self.IMU_ON:
 			self.imu.play()
+			print 'imu played' 
 
 
 	def update_data(self):
@@ -52,13 +56,15 @@ class Manager(object):
 
 		if self.IMU_ON:
 			imu = self.imu.get_data()
+			#print 'imu data updated: ' + str(imu)
 		else:
-			ecg = None
+			imu = None
 
 		self.data = {'ecg': ecg, 'imu': imu }
 
 
 	def get_data(self):
+		#print('data returned : ' + str(self.data))
 		return self.data
 
 
@@ -72,7 +78,23 @@ class Manager(object):
 		
 
 
+def main():
+	manager = Manager(imu_port = '/dev/tty.usbmodem1411')
+	
+	manager.set_sensors(ecg = False, imu = True)
+	manager.launch_sensors()
+	manager.play_sensors()
+	time.sleep(3)
+	for i in range(10):
+		manager.update_data()
+		d = manager.get_data()
+		print d
+		time.sleep(1)
 
+	manager.shutdown()
+
+if __name__ == '__main__':
+	main()
 
 
 
