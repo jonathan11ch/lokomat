@@ -1,7 +1,6 @@
 
 import imu_sensor as IMU
 import ecg_sensor as ECG
-
 import threading
 
 class Manager(object):
@@ -9,7 +8,7 @@ class Manager(object):
 		
 		self.ECG_ON = False
 		self.IMU_ON = False
-		self.data = {'ecg': None, 'hr': None}
+		self.data = {'ecg': None, 'imu': None}
 		self.imu_port = imu_port
 		self.ecg_sensor = ecg_port
 

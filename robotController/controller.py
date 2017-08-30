@@ -1,8 +1,49 @@
+# coding=utf-8
+
 import sys
-
 import qi
-
+from naoqi import ALModule
+from naoqi import ALBroker
+import almath
 import logging
+import time
+import random
+import threading
+
+class RobotModule(ALModule):
+    def __init__(self, name):
+        ALModule.__init__(self, name)
+        
+        self.session = qi.Session()
+
+        self.tts = self.session.service("ALTextToSpeech")
+        self.animatedSpeechProxy = self.session.service("ALAnimatedSpeech")
+        self.motion = self.session.service("ALMotion")
+
+        self.motion.wakeUp()
+        self.motion.setBreathConfig([["Bpm", 6], ["Amplitude", 0.9]])
+        self.motion.setBreathEnabled("Body", True)
+        self.motion.setStiffnesses('Head', 1.0)
+
+
+        self.configuration = {"bodyLanguageMode":"contextual"}
+
+    def setLanguage(self, value):
+        self.tts.setLanguage(value)
+
+    def setVolume(self, value):
+        self.tts.setVolume(value)
+
+    def say(self, textToSay):
+        self.tts.say(textToSay)
+
+
+    def lookAtPatient(self): 
+        names = ["HeadYaw", "HeadPitch"]
+        angleLists = [ 30.0*almath.TO_RAD, -30.0*almath.TO_RAD]
+        timeLists  = [1.0, 1.2]
+        isAbsolute = True
+        self.motion.angleInterpolation(names, angleLists, timeLists, isAbsolute)
 
 
 
@@ -12,7 +53,10 @@ class RobotController(object):
         self.ip = ip
         self.port = port
         self.useSpanish = useSpanish
-        self.session = qi.Session()
+
+        
+        self.go_on = True
+        
 
     def set_limits(self):
         self.hr = 130
@@ -23,10 +67,13 @@ class RobotController(object):
         self.postureCorrectionSentence = 'Trata de enderezarte,\\pau=400\\ pon la espalda recta'
 
 
-
     def connect_to_robot(self):
 
         try:
+            myBroker = ALBroker("myBroker", "0.0.0.0", 0, self.ip, self.port)
+            self.module = RobotModule(name = 'module')
+            global module
+            module =self.module
             self.session.connect("tcp://" + self.ip + ":" + str(self.port))
 
         except RuntimeError:
@@ -34,31 +81,52 @@ class RobotController(object):
                           "Please check your script arguments. Run with -h option for help.")
             sys.exit(1)
 
-        self.animatedSpeechProxy = self.session.service("ALAnimatedSpeech")
-
-        self.tts = self.session.service("ALTextToSpeech")
-
-        self.configuration = {"bodyLanguageMode":"contextual"}
-
-    def say(self, textToSay):
-        self.tts.say(textToSay)
-
-
     def get_data(self, data):
         self.ecg = data['ecg']
-        self.angles = data['angles']
+        self.angles = data['imu']
+
+
         if self.ecg > self.hr:
             self.say(self.hrIsUpSentence)
 
         if self.angles[0] < 90:
             self.say(self.postureCorrectionSentence)
 
+        
+
+
+
+
 
 
 def main():
     nao = RobotController(ip = '10.30.0.110', useSpanish = True)
+    nao.set_sentences()
+    nao.set_limits()
+    
     nao.connect_to_robot()
-    nao.say()
+
+    
+
+    def process(nao):
+        go_on = True
+        while go_on:
+            a = random.random()
+            cont = 10 * a
+            data = {'ecg': cont, 'imu': [cont, cont, cont] }
+            nao.get_data(data)
+            time.sleep(5)
+
+
+    threading.Thread(target  = process , args =(nao)).start
+
+    try:
+        while True:
+            time.sleep(1)
+
+    except KeyboardInterrupt:
+        nao.go_on = False
+
 
 if __name__ == '__main__':
     main()
