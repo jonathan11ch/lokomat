@@ -13,7 +13,7 @@ import threading
 class RobotModule(ALModule):
     def __init__(self, name):
         ALModule.__init__(self, name)
-        
+        self.session.connect("tcp://" + self.ip + ":" + str(self.port))
         self.session = qi.Session()
 
         self.tts = self.session.service("ALTextToSpeech")
@@ -24,6 +24,7 @@ class RobotModule(ALModule):
         self.motion.setBreathConfig([["Bpm", 6], ["Amplitude", 0.9]])
         self.motion.setBreathEnabled("Body", True)
         self.motion.setStiffnesses('Head', 1.0)
+
 
 
         self.configuration = {"bodyLanguageMode":"contextual"}
@@ -53,10 +54,54 @@ class RobotController(object):
         self.ip = ip
         self.port = port
         self.useSpanish = useSpanish
-
+        self.session = qi.Session()
         
+
         self.go_on = True
         
+        print 'b'
+        myBroker = ALBroker("myBroker", "0.0.0.0", 0, self.ip, self.port)
+        #self.module = RobotModule( name = 'module')
+        
+
+
+
+
+        self.session.connect("tcp://" + self.ip + ":" + str(self.port))
+
+        print 'vv'
+
+        self.tts = self.session.service("ALTextToSpeech")
+        self.setLanguage('Spanish')
+        self.animatedSpeechProxy = self.session.service("ALAnimatedSpeech")
+        '''
+        self.motion = self.session.service("ALMotion")
+        self.motion.wakeUp()
+        self.motion.setBreathConfig([["Bpm", 6], ["Amplitude", 0.9]])
+        self.motion.setBreathEnabled("Body", True)
+        self.motion.setStiffnesses('Head', 1.0)
+        '''
+
+
+        self.configuration = {"bodyLanguageMode":"contextual"}
+
+    def setLanguage(self, value):
+        self.tts.setLanguage(value)
+
+    def setVolume(self, value):
+        self.tts.setVolume(value)
+
+    def say(self, textToSay):
+        self.tts.say(textToSay)
+
+
+    def lookAtPatient(self): 
+        names = ["HeadYaw", "HeadPitch"]
+        angleLists = [ 30.0*almath.TO_RAD, -30.0*almath.TO_RAD]
+        timeLists  = [1.0, 1.2]
+        isAbsolute = True
+        self.motion.angleInterpolation(names, angleLists, timeLists, isAbsolute)
+
 
     def set_limits(self):
         self.hr = 130
@@ -70,10 +115,6 @@ class RobotController(object):
     def connect_to_robot(self):
 
         try:
-            myBroker = ALBroker("myBroker", "0.0.0.0", 0, self.ip, self.port)
-            self.module = RobotModule(name = 'module')
-            global module
-            module =self.module
             self.session.connect("tcp://" + self.ip + ":" + str(self.port))
 
         except RuntimeError:
@@ -100,25 +141,36 @@ class RobotController(object):
 
 
 def main():
+
+
     nao = RobotController(ip = '10.30.0.110', useSpanish = True)
+    
+    
     nao.set_sentences()
     nao.set_limits()
-    
-    nao.connect_to_robot()
 
-    
+    print 'x'
+
+#    nao.connect_to_robot()
+
+    #global module
+#    module = nao.module
+
+     
 
     def process(nao):
         go_on = True
         while go_on:
+            print '.....'
             a = random.random()
             cont = 10 * a
-            data = {'ecg': cont, 'imu': [cont, cont, cont] }
+            data = {'ecg': 100*cont, 'imu': [cont, cont, cont] }
+            print data
             nao.get_data(data)
             time.sleep(5)
 
-
-    threading.Thread(target  = process , args =(nao)).start
+    print 'a'  
+    threading.Thread(target  = process , args =(nao,)).start()
 
     try:
         while True:

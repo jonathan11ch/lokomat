@@ -3,7 +3,10 @@ import serial
 import struct
 import time
 import threading
-import sensors
+
+#import sensors
+import lib.sensors as sensors
+
 import logging
 logging.basicConfig(level = logging.DEBUG, format = '[%(levelname)s] (%(threadName)-9s) %(message)s',)
 """
@@ -139,7 +142,7 @@ class EcgSensor(sensors.sensor):
         """
     def get_data(self):
         data = {'hr': self.__data_temp[5]}
-        return data 
+        return data
 
 
 def main():

@@ -27,7 +27,7 @@ logging.basicConfig(level = logging.DEBUG, format = '[%(levelname)s] (%(threadNa
 """
 class sensor(threading.Thread):
     def __init__(self, group = None,process = None, target = None, name = "sensor-thread", args = (), kwargs = None, verbose = None,header_file ="sensor data: " ,file_name ="sensor_data.csv", sample_time = 1):
-        super(sensor, self).__init__(group = group, target = target, name = name, verbose = verbose)
+        super(sensor, self).__init__(group = group, target = target, name = name)
         self.name_csv = file_name
         self.header = header_file
         self.st = sample_time
