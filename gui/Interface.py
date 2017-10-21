@@ -7,36 +7,48 @@ from PyQt5.QtGui import QImage, QPalette, QBrush
 from PyQt5.QtWidgets import *
 
 class Window(QtWidgets.QWidget):
-    
+
     def __init__(self):
         super().__init__()
         self.init_ui()
-        
+
     def init_ui(self):
-        
+        #-----------main config-----------
+        #Window title
         self.setWindowTitle("Lokomat therapy")
-        self.setGeometry(100,100,1000,600)#Tamaño de la ventana 
+        #Window size
+        self.setGeometry(100,100,1000,600)
+        #setting backgroung image
         Image=QImage("back1.jpg")
         sImage=Image.scaled(QSize(1000,600))
         palette=QPalette()
         palette.setBrush(10, QBrush(sImage))
         self.setPalette(palette)
-        self.label1=QtWidgets.QLabel(self)
-        self.label1.setText("Heart Rate")
-        self.label1.setStyleSheet("font-size:20px; Arial")
-        self.label1.setGeometry(40,40, 100,100)
+        #----------------------------------
+        #-----------Labels config----------
+        #Heart rate:
+        #label name
+        self.hrDisplay = {}
+        self.hrDisplay['name'] = QtWidgets.QLabel(self)
+        self.hrDisplay['name'].setText("Heart Rate")
+        self.hrDisplay['name'].setStyleSheet("font-size:20px; Arial")
+        self.hrDisplay['name'].setGeometry(40,40, 100,100)
+
         self.label2=QtWidgets.QLabel(self)
         self.label2.setText("Yaw")
         self.label2.setStyleSheet("font-size:20px; Arial")
         self.label2.setGeometry(50,110, 100,100)
+
         self.label3=QtWidgets.QLabel(self)
         self.label3.setText("Pitch")
         self.label3.setStyleSheet("font-size:20px; Arial")
         self.label3.setGeometry(50,180, 100,100)
+
         self.label4=QtWidgets.QLabel(self)
         self.label4.setText("Roll")
         self.label4.setStyleSheet("font-size:20px; Arial")
         self.label4.setGeometry(50,250, 100,100)
+
         self.textbox=QtWidgets.QLineEdit(self)
         self.textbox.setGeometry(150,65, 100,50)
         self.textbox.setStyleSheet("font-size:20px; Arial")
@@ -97,7 +109,7 @@ class Window(QtWidgets.QWidget):
         Icon_resize= Icon2.scaled(700,80)
         self.Labelborg.setPixmap(Icon_resize)
         #self.Labelborg.setIconSize(QSize(600,50))
-        
+
         #self.Labelborg.setPixmap(QtGui.QPixmap('borg_act'))
         #image.scaled(200,200,Qt::IgnoreAspectRatio,Qt::FastTransformation);
         #Botones Escala de Borg
@@ -146,19 +158,19 @@ class Window(QtWidgets.QWidget):
         self.Borg15=QtWidgets.QCommandLinkButton(self)
         self.Borg15.setGeometry(702,435,49,80)
         self.Borg15.setIconSize(QSize(0, 0))
-        
-        
-        
-        
-        
-        
 
-        
 
-        
-        
-        
-        
+
+
+
+
+
+
+
+
+
+
+
 
         #self.Label1=QtWidgets.QLabel(self)
         #self.Label1.setText("Hello World")
@@ -171,13 +183,10 @@ class Window(QtWidgets.QWidget):
         #self.Label1.move(130,20)#mover el label
         #self.Label2.move(120,90)
         self.show()
-        
+
 
 app=QtWidgets.QApplication(sys.argv)
 GUI=Window()
 sys.exit(app.exec_())
 
 #M=run()
-
-        
-    

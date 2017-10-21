@@ -62,10 +62,6 @@ class RobotController(object):
         print 'b'
         myBroker = ALBroker("myBroker", "0.0.0.0", 0, self.ip, self.port)
         #self.module = RobotModule( name = 'module')
-        
-
-
-
 
         self.session.connect("tcp://" + self.ip + ":" + str(self.port))
 
