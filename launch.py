@@ -1,7 +1,8 @@
 import threading
 import lib.manager as man
+import lib.Analog_Joystick_rpi as Joy
+import gui.Interface as interface
 import time
-import gui.index as index
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 
@@ -10,27 +11,42 @@ class LokomatInterface(object):
 
 	def __init__(self):
 		#create interface object
-		self.interface = index.MainInterface()
+		self.therapy_win = interface.MainTherapyWin()
 		#create sensor manager
 		self.manager = man.Manager(imu_port = '/dev/tty.usbmodem1411',ecg_port ='/dev/tty.HXM035704-BluetoothSeri')
-		self.manager.set_sensors(ecg = False, imu = True)
+		self.manager.set_sensors(ecg = False, imu = False)
 		#launch capture thread
 		self.manager.launch_sensors()
 		#connecting to interface
-		self.interface.ConnectStartButton(self.on_start_clicked)
-		self.interface.ConnectStopButton(self.set_consult_off)
-
+		self.therapy_win.ConnectStartButton(self.on_start_clicked)
+		self.therapy_win.ConnectStopButton(self.set_consult_off)
+		#Joystick object
+		self.Joy = Joy.Analog_Joystick()
+		self.JoyThread = threading.Thread(target = self.joy_lecture)
 		#boolean
 		self.ON = True
+		self.JOY_ON =True
+		self.joy_ts = 0.5
 
 	def on_start_clicked(self):
 		self.manager.play_sensors()
 		time.sleep(3)
 		#launch capture thread
 		threading.Thread(target = self.consult).start()
+		self.JoyThread.start()
 
 	def set_consult_off(self):
 		self.ON = False
+		self.JOY_ON = False
+
+	def joy_lecture(self):
+		time.sleep(5)
+		while self.JOY_ON:
+			d = self.Joy.Channel_data()
+			self.therapy_win.Borg.j = d['x']
+			self.therapy_win.onJoy.emit()
+			time.sleep(self.joy_ts)
+
 
 	def consult(self):
 		cont = 0
@@ -79,7 +95,6 @@ def main2():
 	a = LokomatInterface()
 
 	sys.exit(app.exec_())
-
 
 
 if __name__ == '__main__':

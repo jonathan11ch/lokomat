@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import *
 
 class MainTherapyWin(QtWidgets.QWidget):
     onData = QtCore.pyqtSignal()
+    onJoy = QtCore.pyqtSignal()
     def __init__(self):
         super().__init__()
         self.init_ui()
@@ -14,6 +15,8 @@ class MainTherapyWin(QtWidgets.QWidget):
         self.dataToDisplay = {'hr' : 0, 'yaw' : 0, 'pitch' : 0, 'roll' : 0}
         #set signals
         self.set_signals()
+
+        #self.j = None
 
     def init_ui(self):
         #-----------main config-----------
@@ -132,6 +135,7 @@ class MainTherapyWin(QtWidgets.QWidget):
         self.controlButtons['start'].clicked.connect(self.onStartClicked)
         self.controlButtons['stop'].clicked.connect(self.onStopClicked)
         self.onData.connect(self.display_data)
+        self.onJoy.connect(self.Borg.move)
 
     #----------------------------- SIGNAL METHODS ------------------------------
     def ConnectStartButton(self, f):
@@ -168,6 +172,7 @@ class BorgButton(object):
     def __init__(self, window):
         self.window = window
         self.cursorStatus = 0
+        self.j = None
         #setting background Label Borgº
         self.Labelborg=QtWidgets.QLabel(self.window)
         self.Labelborg.setGeometry(50,430,718,90)
@@ -217,11 +222,12 @@ class BorgButton(object):
         self.Borg[p].setStyleSheet("border:3px solid rgb(0,0,0);")
         self.cursorStatus = p
 
-    def move(self, d):
-        if d == 4:
+    def move(self):
+
+        if self.j == 4:
             if self.cursorStatus < 14:
                 self.set_cursor(self.cursorStatus + 1)
-        elif d ==2:
+        elif self.j ==2:
             if self.cursorStatus > 0:
                 self.set_cursor(self.cursorStatus -1)
 
