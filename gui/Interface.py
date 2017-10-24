@@ -5,7 +5,7 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QImage, QPalette, QBrush
 from PyQt5.QtWidgets import *
 
-class Window(QtWidgets.QWidget):
+class MainTherapyWin(QtWidgets.QWidget):
     onData = QtCore.pyqtSignal()
     def __init__(self):
         super().__init__()
@@ -22,7 +22,7 @@ class Window(QtWidgets.QWidget):
         #Window size
         self.setGeometry(100,100,1000,600)#Tamaño de la ventana
         #setting backgroung image
-        Image=QImage("back1.jpg")
+        Image=QImage("img/back1.jpg")
         sImage=Image.scaled(QSize(1000,600))
         palette=QPalette()
         palette.setBrush(10, QBrush(sImage))
@@ -98,20 +98,20 @@ class Window(QtWidgets.QWidget):
         self.controlButtons['start'].setText("Start")
         self.controlButtons['start'].setGeometry(50,520,120,60)
         self.controlButtons['start'].setStyleSheet("font-size:20px; Arial")
-        self.controlButtons['start'].setIcon(QtGui.QIcon('play2'))
+        self.controlButtons['start'].setIcon(QtGui.QIcon('img/play2'))
         self.controlButtons['start'].setIconSize(QSize(40,40))
         #stop button
         self.controlButtons['stop'] = QtWidgets.QPushButton(self)
         self.controlButtons['stop'].setText("Stop")
         self.controlButtons['stop'].setGeometry(180,520,120,60)
         self.controlButtons['stop'].setStyleSheet("font-size:20px; Arial")
-        self.controlButtons['stop'].setIcon(QtGui.QIcon('stop'))
+        self.controlButtons['stop'].setIcon(QtGui.QIcon('img/stop'))
         self.controlButtons['stop'].setIconSize(QSize(40,40))
         #----------------------------------
         #
         self.LabelPosture=QtWidgets.QLabel(self)
         self.LabelPosture.setGeometry(760,60,220,440)
-        self.LabelPosture.setPixmap(QtGui.QPixmap('cervical'))
+        self.LabelPosture.setPixmap(QtGui.QPixmap('img/cervical'))
         #
         self.LabelTitle=QtWidgets.QLabel(self)
         self.LabelTitle.setGeometry(788,10,240,30)
@@ -120,68 +120,13 @@ class Window(QtWidgets.QWidget):
         #self.Stop.setIconSize(QSize(800,500))
         self.LabelPosture1=QtWidgets.QLabel(self)
         self.LabelPosture1.setGeometry(340,100,400,300)
-        self.LabelPosture1.setPixmap(QtGui.QPixmap('cervical'))
+        self.LabelPosture1.setPixmap(QtGui.QPixmap('img/cervical'))
 
-
-    #def create_display_dict(self, name, style,x,y,w,h):
-
-        self.Labelborg=QtWidgets.QLabel(self)
-        self.Labelborg.setGeometry(50,430,700,90)
-        Icon2=QtGui.QPixmap("borg_act")
-        Icon_resize= Icon2.scaled(700,90)
-        self.Labelborg.setPixmap(Icon_resize)
-        
-        #Push buttons Borg Scale
-        self.Borg1=QtWidgets.QCommandLinkButton(self)
-        self.Borg1.setIconSize(QSize(0, 0))
-        self.Borg1.setGeometry(50,430,48,90)
-        self.Borg1.setStyleSheet("border:2px solid rgb(0,200,0);")
-       
-        self.Borg2=QtWidgets.QCommandLinkButton(self)
-        self.Borg2.setGeometry(98,430,48,90)
-        self.Borg2.setIconSize(QSize(0, 0))
-        self.Borg3=QtWidgets.QCommandLinkButton(self)
-        self.Borg3.setGeometry(145,430,46,90)
-        self.Borg3.setIconSize(QSize(0, 0))
-        self.Borg4=QtWidgets.QCommandLinkButton(self)
-        self.Borg4.setGeometry(192,430,46,90)
-        self.Borg4.setIconSize(QSize(0, 0))
-        self.Borg5=QtWidgets.QCommandLinkButton(self)
-        self.Borg5.setGeometry(237,430,46,90)
-        self.Borg5.setIconSize(QSize(0, 0))
-        self.Borg6=QtWidgets.QCommandLinkButton(self)
-        self.Borg6.setGeometry(285,430,46,90)
-        self.Borg6.setIconSize(QSize(0, 0))
-        self.Borg7=QtWidgets.QCommandLinkButton(self)
-        self.Borg7.setGeometry(331,430,46,90)
-        self.Borg7.setIconSize(QSize(0, 0))
-        self.Borg8=QtWidgets.QCommandLinkButton(self)
-        self.Borg8.setGeometry(377,430,46,90)
-        self.Borg8.setIconSize(QSize(0, 0))
-        self.Borg9=QtWidgets.QCommandLinkButton(self)
-        self.Borg9.setGeometry(423,430,46,90)
-        self.Borg9.setIconSize(QSize(0, 0))
-        self.Borg10=QtWidgets.QCommandLinkButton(self)
-        self.Borg10.setGeometry(469,430,46,90)
-        self.Borg10.setIconSize(QSize(0, 0))
-        self.Borg11=QtWidgets.QCommandLinkButton(self)
-        self.Borg11.setGeometry(517,430,46,90)
-        self.Borg11.setIconSize(QSize(0, 0))
-        self.Borg12=QtWidgets.QCommandLinkButton(self)
-        self.Borg12.setGeometry(562,430,46,90)
-        self.Borg12.setIconSize(QSize(0, 0))
-        self.Borg13=QtWidgets.QCommandLinkButton(self)
-        self.Borg13.setGeometry(609,430,46,90)
-        self.Borg13.setIconSize(QSize(0, 0))
-        self.Borg14=QtWidgets.QCommandLinkButton(self)
-        self.Borg14.setGeometry(655,430,47,90)
-        self.Borg14.setIconSize(QSize(0, 0))
-        self.Borg15=QtWidgets.QCommandLinkButton(self)
-        self.Borg15.setGeometry(702,430,49,90)
-        self.Borg15.setIconSize(QSize(0, 0))
-
+        #create borgscale button
+        self.Borg = BorgButton(self)
 
         self.show()
+
 
     def set_signals(self):
         self.controlButtons['start'].clicked.connect(self.onStartClicked)
@@ -200,6 +145,7 @@ class Window(QtWidgets.QWidget):
         #function to modify the interface state and visuals
         print('start clicked')
         self.update_display_data(d = {'hr' : 1, 'yaw' : 2, 'pitch' : 3, 'roll' : 4})
+        self.Borg.move(4)
 
     def display_data(self):
         self.hrDisplay['lcd'].display(self.dataToDisplay['hr'])
@@ -215,11 +161,83 @@ class Window(QtWidgets.QWidget):
         #function to modify the interface state and visuals
         print('stop clicked')
         self.update_display_data(d = {'hr' : 0, 'yaw' : 0, 'pitch' : 0, 'roll' : 0})
+        self.Borg.move(2)
+
+#Borg Button object
+class BorgButton(object):
+    def __init__(self, window):
+        self.window = window
+        self.cursorStatus = 0
+        #setting background Label Borgº
+        self.Labelborg=QtWidgets.QLabel(self.window)
+        self.Labelborg.setGeometry(50,430,718,90)
+        Icon2=QtGui.QPixmap("img/borg_act")
+        Icon_resize= Icon2.scaled(700,90)
+        self.Labelborg.setPixmap(Icon_resize)
+
+        #get borg scale buttons
+        self.create_borg_button()
+
+    def create_borg_button(self, ep = 48,xp = 50, yp = 430, hp = 48,wp = 90):
+        self.Borg = []
+        offset = 1
+        x = xp
+        e = ep
+        y = yp
+        h = hp
+        w = wp
+        for i in range(15):
+            #print ('button created')
+            #self.Borg.append(QtWidgets.QCommandLinkButton(self.window))
+            self.Borg.append(QtWidgets.QLabel(self.window))
+            #self.Borg[-1].setIconSize(QSize(0, 0))
+            Icon2=QtGui.QPixmap("img/l" + str(i))
+            Icon_resize= Icon2.scaled(h,w)
+            self.Borg[-1].setPixmap(Icon_resize)
+            self.Borg[-1].setGeometry(x,y,h,w)
+            x = x + e
+            '''
+            if i < 2:
+                self.Borg.append(QtWidgets.QCommandLinkButton(self.window))
+                self.Borg[-1].setIconSize(QSize(0, 0))
+                self.Borg[-1].setGeometry(x,y,h,w)
+                x = x + e
+
+            else:
+                self.Borg.append(QtWidgets.QCommandLinkButton(self.window))
+                self.Borg[-1].setIconSize(QSize(0, 0))
+                self.Borg[-1].setGeometry(x,y,h-1,w)
+                x = x + e
+            '''
+
+        self.set_cursor(0)
+
+    def set_cursor(self, p):
+        self.Borg[self.cursorStatus].setStyleSheet("border-style: outset")
+        self.Borg[p].setStyleSheet("border:3px solid rgb(0,0,0);")
+        self.cursorStatus = p
+
+    def move(self, d):
+        if d == 4:
+            if self.cursorStatus < 14:
+                self.set_cursor(self.cursorStatus + 1)
+        elif d ==2:
+            if self.cursorStatus > 0:
+                self.set_cursor(self.cursorStatus -1)
+
+    #def
+
+    #TODO: to implement these functions
+    def lock_buttons(self):
+        print('lock borg buttons')
+
+    def unlock_buttons(self):
+        print('unlock borg buttons')
 
 
 
 app=QtWidgets.QApplication(sys.argv)
-GUI=Window()
+GUI=MainTherapyWin()
 sys.exit(app.exec_())
 
 #M=run()
