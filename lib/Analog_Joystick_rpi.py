@@ -67,7 +67,7 @@ def main():
      while True:
          pos=joy.Channel_data()
          time.sleep(joy.delay)
-         print pos
+         ##print pos
 
-
-H=main()
+if __name__ == '__main__':
+    H = main()
