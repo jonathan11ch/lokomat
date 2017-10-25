@@ -7,8 +7,8 @@ import time
 import imu_sensor as IMU
 import ecg_sensor as ECG
 '''
-import lib.IMU_BNO055_rpi as IMU
-import lib.ecg_sensor as ECG
+import IMU_BNO055_rpi as IMU
+import ecg_sensor as ECG
 
 import threading
 
@@ -40,14 +40,14 @@ class Manager(object):
 			self.imu1 = IMU.ImuHandler(
 									  sample = self.imu1_settings['sample'],
 									  dev1 = self.imu1_settings['port'],
-									  bus = self.imu1_settings['bus']
+									  b = self.imu1_settings['bus']
 									 )
 		if self.IMU2_ON:
 			print ('imu2 created')
 			self.imu2 = IMU.ImuHandler(
 									  sample = self.imu2_settings['sample'],
 									  dev1 = self.imu2_settings['port'],
-									  bus = self.imu2_settings['bus']
+									  b = self.imu2_settings['bus']
 									 )
 		if self.ECG_ON:
 			self.ecg = ECG.EcgSensor(
@@ -59,12 +59,12 @@ class Manager(object):
 	def launch_sensors(self):
 		#launch imu thread
 		if self.IMU1_ON:
-			self.imu.launch_thread()
+			self.imu1.launch_thread()
 			#threading.Thread(target = self.imu.process).start()
 			print ('imu started and launched')
 
 		if self.IMU2_ON:
-			self.imu.launch_thread()
+			self.imu2.launch_thread()
 			#threading.Thread(target = self.imu.process).start()
 			print ('imu started and launched')
 		#launch ecg thread
@@ -94,7 +94,7 @@ class Manager(object):
 			ecg = None
 
 		if self.IMU1_ON:
-			imu1 = self.imu.get_data()
+			imu1 = self.imu1.get_data()
 			#print 'imu data updated: ' + str(imu)
 		else:
 			imu1 = None
@@ -133,7 +133,7 @@ def main():
 					  ecg_settings = {'port': 'COM3', 'sample': 1}
 					  )
 
-	manager.set_sensors(ecg = False, imu1 = True, imu2 = False )
+	manager.set_sensors(ecg = False, imu1 = True, imu2 = True )
 	manager.launch_sensors()
 	manager.play_sensors()
 	print('waiting.. ..')

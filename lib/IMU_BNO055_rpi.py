@@ -128,7 +128,7 @@ def main2():
     imu = ImuHandler(sample = 1, dev1 = 0x28, b = 1)
     imu.launch_thread()
     for i in range(10):
-        print imu.data
+        print (imu.data)
         time.sleep(1)
     imu.shutdown()
 

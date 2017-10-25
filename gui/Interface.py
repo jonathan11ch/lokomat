@@ -101,14 +101,14 @@ class MainTherapyWin(QtWidgets.QWidget):
         self.controlButtons['start'].setText("Start")
         self.controlButtons['start'].setGeometry(50,520,120,60)
         self.controlButtons['start'].setStyleSheet("font-size:20px; Arial")
-        self.controlButtons['start'].setIcon(QtGui.QIcon('img/play2'))
+        self.controlButtons['start'].setIcon(QtGui.QIcon('gui/img/play2'))
         self.controlButtons['start'].setIconSize(QSize(40,40))
         #stop button
         self.controlButtons['stop'] = QtWidgets.QPushButton(self)
         self.controlButtons['stop'].setText("Stop")
         self.controlButtons['stop'].setGeometry(180,520,120,60)
         self.controlButtons['stop'].setStyleSheet("font-size:20px; Arial")
-        self.controlButtons['stop'].setIcon(QtGui.QIcon('img/stop'))
+        self.controlButtons['stop'].setIcon(QtGui.QIcon('gui/img/stop'))
         self.controlButtons['stop'].setIconSize(QSize(40,40))
         #----------------------------------
         #
