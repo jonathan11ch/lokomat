@@ -110,6 +110,7 @@ class MainTherapyWin(QtWidgets.QWidget):
         self.controlButtons['stop'].setStyleSheet("font-size:20px; Arial")
         self.controlButtons['stop'].setIcon(QtGui.QIcon('gui/img/stop'))
         self.controlButtons['stop'].setIconSize(QSize(40,40))
+        self.controlButtons['start'].setEnabled(False)
         #----------------------------------
         #
         self.LabelPosture=QtWidgets.QLabel(self)
@@ -149,11 +150,15 @@ class MainTherapyWin(QtWidgets.QWidget):
     def onStartClicked(self):
         #function to modify the interface state and visuals
         print('start clicked')
+        #lock start button
+        self.controlButtons['start'].setEnabled(False)
+        self.controlButtons['stop'].setEnabled(True)
         self.update_display_data(d = {'hr' : 1, 'yaw' : 2, 'pitch' : 3, 'roll' : 4})
         self.Borg.j = 4
         self.Borg.move()
 
     def display_data(self):
+
         self.hrDisplay['lcd'].display(self.dataToDisplay['hr'])
         self.yawDisplay['lcd'].display(self.dataToDisplay['yaw'])
         self.pitchDisplay['lcd'].display(self.dataToDisplay['pitch'])
@@ -165,6 +170,8 @@ class MainTherapyWin(QtWidgets.QWidget):
 
     def onStopClicked(self):
         #function to modify the interface state and visuals
+        self.controlButtons['start'].setEnabled(True)
+        self.controlButtons['stop'].setEnabled(False)
         print('stop clicked')
         self.update_display_data(d = {'hr' : 0, 'yaw' : 0, 'pitch' : 0, 'roll' : 0})
         self.Borg.j = 2
