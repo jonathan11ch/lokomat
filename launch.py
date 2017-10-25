@@ -11,13 +11,18 @@ class LokomatInterface(object):
 
 	def __init__(self):
 		#create interface object
-		self.therapy_win = interface.MainTherapyWin()
+                print('ak')
+                self.therapy_win = interface.MainTherapyWin()
 		#create sensor manager
+		#print('ak')
 		self.manager = man.Manager(imu_port = '/dev/tty.usbmodem1411',ecg_port ='/dev/tty.HXM035704-BluetoothSeri')
+		#print('ak')
 		self.manager.set_sensors(ecg = False, imu = False)
 		#launch capture thread
+		#print('ak')
 		self.manager.launch_sensors()
 		#connecting to interface
+		
 		self.therapy_win.ConnectStartButton(self.on_start_clicked)
 		self.therapy_win.ConnectStopButton(self.set_consult_off)
 		#Joystick object
@@ -29,23 +34,28 @@ class LokomatInterface(object):
 		self.joy_ts = 0.5
 
 	def on_start_clicked(self):
-		self.manager.play_sensors()
-		time.sleep(3)
+                print('started from launch')
+                self.manager.play_sensors()
+                time.sleep(3)
 		#launch capture thread
-		threading.Thread(target = self.consult).start()
-		self.JoyThread.start()
+                threading.Thread(target = self.consult).start()
+                self.JoyThread.start()
 
 	def set_consult_off(self):
 		self.ON = False
 		self.JOY_ON = False
+           
 
 	def joy_lecture(self):
-		time.sleep(5)
-		while self.JOY_ON:
-			d = self.Joy.Channel_data()
-			self.therapy_win.Borg.j = d['x']
-			self.therapy_win.onJoy.emit()
-			time.sleep(self.joy_ts)
+          time.sleep(5)
+          print("joy lecture thread started")
+          
+          while self.JOY_ON:
+              d = self.Joy.Channel_data()
+              self.therapy_win.Borg.j = d['x']
+              self.therapy_win.onJoy.emit()
+              print(d)    
+              (self.joy_ts)
 
 
 	def consult(self):
@@ -93,6 +103,7 @@ def main():
 def main2():
 	app = QtWidgets.QApplication(sys.argv)
 	a = LokomatInterface()
+	
 
 	sys.exit(app.exec_())
 

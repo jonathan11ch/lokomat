@@ -25,7 +25,7 @@ class MainTherapyWin(QtWidgets.QWidget):
         #Window size
         self.setGeometry(100,100,1000,600)#Tamaño de la ventana
         #setting backgroung image
-        Image=QImage("img/back1.jpg")
+        Image=QImage("gui/img/back1.jpg")
         sImage=Image.scaled(QSize(1000,600))
         palette=QPalette()
         palette.setBrush(10, QBrush(sImage))
@@ -114,7 +114,7 @@ class MainTherapyWin(QtWidgets.QWidget):
         #
         self.LabelPosture=QtWidgets.QLabel(self)
         self.LabelPosture.setGeometry(760,60,220,440)
-        self.LabelPosture.setPixmap(QtGui.QPixmap('img/cervical'))
+        self.LabelPosture.setPixmap(QtGui.QPixmap('gui/img/cervical'))
         #
         self.LabelTitle=QtWidgets.QLabel(self)
         self.LabelTitle.setGeometry(788,10,240,30)
@@ -123,7 +123,7 @@ class MainTherapyWin(QtWidgets.QWidget):
         #self.Stop.setIconSize(QSize(800,500))
         self.LabelPosture1=QtWidgets.QLabel(self)
         self.LabelPosture1.setGeometry(340,100,400,300)
-        self.LabelPosture1.setPixmap(QtGui.QPixmap('img/cervical'))
+        self.LabelPosture1.setPixmap(QtGui.QPixmap('gui/img/cervical'))
 
         #create borgscale button
         self.Borg = BorgButton(self)
@@ -138,10 +138,11 @@ class MainTherapyWin(QtWidgets.QWidget):
         self.onJoy.connect(self.Borg.move)
 
     #----------------------------- SIGNAL METHODS ------------------------------
-    def ConnectStartButton(self, f):
+    def connectStartButton(self, f):
+        print('connectStartButton')
         self.controlButtons['start'].clicked.connect(f)
 
-    def ConnectStopButton(self, f):
+    def connectStopButton(self, f):
         self.controlButtons['stop'].clicked.connect(f)
     #---------------------------------------------------------------------------
 
@@ -178,7 +179,7 @@ class BorgButton(object):
         #setting background Label Borgº
         self.Labelborg=QtWidgets.QLabel(self.window)
         self.Labelborg.setGeometry(50,430,718,90)
-        Icon2=QtGui.QPixmap("img/borg_act")
+        Icon2=QtGui.QPixmap("gui/img/borg_act")
         Icon_resize= Icon2.scaled(700,90)
         self.Labelborg.setPixmap(Icon_resize)
 
@@ -198,7 +199,7 @@ class BorgButton(object):
             #self.Borg.append(QtWidgets.QCommandLinkButton(self.window))
             self.Borg.append(QtWidgets.QLabel(self.window))
             #self.Borg[-1].setIconSize(QSize(0, 0))
-            Icon2=QtGui.QPixmap("img/l" + str(i))
+            Icon2=QtGui.QPixmap("gui/img/l" + str(i))
             Icon_resize= Icon2.scaled(h,w)
             self.Borg[-1].setPixmap(Icon_resize)
             self.Borg[-1].setGeometry(x,y,h,w)
@@ -243,9 +244,9 @@ class BorgButton(object):
         print('unlock borg buttons')
 
 
-
-app=QtWidgets.QApplication(sys.argv)
-GUI=MainTherapyWin()
-sys.exit(app.exec_())
+if __name__ == '__main__':
+    app=QtWidgets.QApplication(sys.argv)
+    GUI=MainTherapyWin()
+    sys.exit(app.exec_())
 
 #M=run()
