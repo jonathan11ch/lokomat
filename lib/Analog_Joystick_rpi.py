@@ -1,7 +1,7 @@
 import spidev
 import time
 import os
-import threading 
+import threading
 
 class Analog_Joystick(object):
 
@@ -90,12 +90,12 @@ def main():
      while True:
          pos=joy.Channel_data()
          time.sleep(joy.delay)
-         print pos
+         print(pos)
 def main2():
     joy = JoyHandler(sample = 1)
     joy.launch_thread()
     for i in range(10):
-        print joy.data
+        print(joy.data)
         time.sleep(1)
     joy.shutdown()
 

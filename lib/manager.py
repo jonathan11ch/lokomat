@@ -13,32 +13,59 @@ import lib.ecg_sensor as ECG
 import threading
 
 class Manager(object):
-	def __init__(self, imu_port = 'COM4', ecg_port = 'COM3'):
+	def __init__(self,
+				 imu1_settings = {'port': 0x28, 'sample': 1, 'bus': 1},
+				 imu2_settings = {'port': 0x29, 'sample': 1, 'bus': 1},
+				 ecg_settings = {'port': 'COM3', 'sample': 1}
+				 ):
 
 		self.ECG_ON = False
-		self.IMU_ON = False
-		self.data = {'ecg': None, 'imu': None}
-		self.imu_port = imu_port
-		self.ecg_port = ecg_port
+		self.IMU1_ON = False
+		self.IMU2_ON = False
+
+		self.data = {'ecg': None, 'imu1': None, 'imu2': None}
+		self.imu1_settings = imu1_settings
+		self.imu2_settings = imu2_settings
+		self.ecg_settings = ecg_settings
 
 
-	def set_sensors(self, ecg = True, imu = True):
+	def set_sensors(self, ecg = True, imu1 = True, imu2 = False):
 
 		self.ECG_ON = ecg
-		self.IMU_ON = imu
+		self.IMU1_ON = imu1
+		self.IMU2_ON = imu2
 
-		if self.IMU_ON:
-			print ('imu created')
-			self.imu = IMU.ImuSensor(port = self.imu_port, br = 9600)
+		if self.IMU1_ON:
+			print ('imu1 created')
+			self.imu1 = IMU.ImuHandler(
+									  sample = self.imu1_settings['sample'],
+									  dev1 = self.imu1_settings['port'],
+									  bus = self.imu1_settings['bus']
+									 )
+		if self.IMU2_ON:
+			print ('imu2 created')
+			self.imu2 = IMU.ImuHandler(
+									  sample = self.imu2_settings['sample'],
+									  dev1 = self.imu2_settings['port'],
+									  bus = self.imu2_settings['bus']
+									 )
 		if self.ECG_ON:
-			self.ecg = ECG.EcgSensor(port = self.ecg_port)
+			self.ecg = ECG.EcgSensor(
+									  port = self.ecg_settings['port'],
+									  sample = self.ecg_settings['sample']
+									)
 
 
 	def launch_sensors(self):
 		#launch imu thread
-		if self.IMU_ON:
-			self.imu.start()
-			threading.Thread(target = self.imu.process).start()
+		if self.IMU1_ON:
+			self.imu.launch_thread()
+			#threading.Thread(target = self.imu.process).start()
+			print ('imu started and launched')
+
+		if self.IMU2_ON:
+			self.imu.launch_thread()
+			#threading.Thread(target = self.imu.process).start()
 			print ('imu started and launched')
 		#launch ecg thread
 		if self.ECG_ON:
@@ -51,9 +78,13 @@ class Manager(object):
 			self.ecg.play()
 
 
-		if self.IMU_ON:
-			self.imu.play()
-			print ('imu played')
+		if self.IMU1_ON:
+			self.imu1.play()
+			print ('imu1 played')
+
+		if self.IMU2_ON:
+			self.imu2.play()
+			print ('imu2 played')
 
 
 	def update_data(self):
@@ -62,13 +93,19 @@ class Manager(object):
 		else:
 			ecg = None
 
-		if self.IMU_ON:
-			imu = self.imu.get_data()
+		if self.IMU1_ON:
+			imu1 = self.imu.get_data()
 			#print 'imu data updated: ' + str(imu)
 		else:
-			imu = None
+			imu1 = None
 
-		self.data = {'ecg': ecg, 'imu': imu }
+		if self.IMU2_ON:
+			imu2 = self.imu2.get_data()
+			#print 'imu data updated: ' + str(imu)
+		else:
+			imu2 = None
+
+		self.data = {'ecg': ecg, 'imu1': imu1, 'imu2': imu2 }
 
 
 	def get_data(self):
@@ -78,8 +115,11 @@ class Manager(object):
 
 	def shutdown(self):
 		#shutdown Imu
-		if self.IMU_ON:
-			self.imu.shutdown()
+		if self.IMU1_ON:
+			self.imu1.shutdown()
+
+		if self.IMU2_ON:
+			self.imu2.shutdown()
 		#shutdown Ecg
 		if self.ECG_ON:
 			self.ecg.shutdown()
@@ -87,9 +127,13 @@ class Manager(object):
 
 
 def main():
-	manager = Manager(imu_port = '/dev/tty.usbmodem1411',ecg_port ='/dev/tty.HXM035704-BluetoothSeri')
+	manager = Manager(
+					  imu1_settings = {'port': 0x28, 'sample': 1, 'bus': 1},
+					  imu2_settings = {'port': 0x29, 'sample': 1, 'bus': 1},
+					  ecg_settings = {'port': 'COM3', 'sample': 1}
+					  )
 
-	manager.set_sensors(ecg = False, imu = True)
+	manager.set_sensors(ecg = False, imu1 = True, imu2 = False )
 	manager.launch_sensors()
 	manager.play_sensors()
 	print('waiting.. ..')

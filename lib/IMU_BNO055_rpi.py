@@ -81,22 +81,33 @@ class IMU_BNO055(object):
 
 
 
-def ImuHandler(IMU_BNO055):
+class ImuHandler(IMU_BNO055):
     def __init__(self, sample = 1, dev1 = 0x28, b  = 1):
         super(ImuHandler,self).__init__(device_address = dev1, bus = b)
         self.ON = True
         self.data = {}
         self.Ts  = sample
+        self.pause  = True
 
     def process(self):
         print('start imu acquire process')
         while self.ON:
-            self.data = self.read_i2c()
-            time.sleep(self.Ts)
+            if not self.pause:
+                self.data = self.read_i2c()
+                time.sleep(self.Ts)
         print('finishing imu acquiring process')
+
+    def get_data(self):
+        return self.data
 
     def shutdown(self):
         self.ON = False
+
+    def play(self):
+        self.pause = False
+
+    def pause(self):
+        self.pause = True
 
     def launch_thread(self):
         self.ImuThread = threading.Thread(target = self.process)
