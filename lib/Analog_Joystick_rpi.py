@@ -1,6 +1,7 @@
 import spidev
 import time
 import os
+import threading 
 
 class Analog_Joystick(object):
 
