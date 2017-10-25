@@ -149,7 +149,8 @@ class MainTherapyWin(QtWidgets.QWidget):
         #function to modify the interface state and visuals
         print('start clicked')
         self.update_display_data(d = {'hr' : 1, 'yaw' : 2, 'pitch' : 3, 'roll' : 4})
-        self.Borg.move(4)
+        self.Borg.j = 4
+        self.Borg.move()
 
     def display_data(self):
         self.hrDisplay['lcd'].display(self.dataToDisplay['hr'])
@@ -165,7 +166,8 @@ class MainTherapyWin(QtWidgets.QWidget):
         #function to modify the interface state and visuals
         print('stop clicked')
         self.update_display_data(d = {'hr' : 0, 'yaw' : 0, 'pitch' : 0, 'roll' : 0})
-        self.Borg.move(2)
+        self.Borg.j = 2
+        self.Borg.move()
 
 #Borg Button object
 class BorgButton(object):
