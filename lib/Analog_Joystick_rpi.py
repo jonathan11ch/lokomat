@@ -62,12 +62,41 @@ class Analog_Joystick(object):
         self.Position['z'] = pos
         return self.Position
 
+class JoyHandler(Analog_Joystick):
+    def __init__(self, sample = 1):
+        super(JoyHandler, self).__init__()
+        self.Ts  = sample
+        self.ON  = True
+        self.data = {}
+
+
+    def process(self):
+        while self.ON:
+            self.data = self.Channel_data()
+            time.sleep(self.Ts)
+
+    def launch_thread(self):
+        self.JoyThread = threading.Thread(target = self.process)
+        self.JoyThread.start()
+
+    def shutdown(self):
+        self.ON = False
+
+
+
 def main():
      joy= Analog_Joystick()
      while True:
          pos=joy.Channel_data()
          time.sleep(joy.delay)
          print pos
+def main2():
+    joy = JoyHandler(sample = 1)
+    joy.launch_thread()
+    for i in range(10):
+        print joy.data
+        time.sleep(1)
+    joy.shutdown()
 
-
-H=main()
+if __name__ == '__main__':
+    main2()

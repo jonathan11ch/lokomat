@@ -7,7 +7,7 @@ import time
 import imu_sensor as IMU
 import ecg_sensor as ECG
 '''
-import lib.imu_sensor as IMU
+import lib.IMU_BNO055_rpi as IMU
 import lib.ecg_sensor as ECG
 
 import threading
