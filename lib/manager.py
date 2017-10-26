@@ -23,7 +23,10 @@ class Manager(object):
 		self.IMU1_ON = False
 		self.IMU2_ON = False
 
-		self.data = {'ecg': None, 'imu1': None, 'imu2': None}
+		self.data = {'ecg': {'hr' : 0},
+		 			 'imu1': {'yaw' : 0, 'pitch' : 0,'roll' : 0},
+		 			 'imu2': {'yaw' : 0, 'pitch' : 0,'roll' : 0}
+					}
 		self.imu1_settings = imu1_settings
 		self.imu2_settings = imu2_settings
 		self.ecg_settings = ecg_settings

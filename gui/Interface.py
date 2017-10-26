@@ -12,7 +12,14 @@ class MainTherapyWin(QtWidgets.QWidget):
         super().__init__()
         self.init_ui()
 
-        self.dataToDisplay = {'hr' : 0, 'yaw' : 0, 'pitch' : 0, 'roll' : 0}
+        self.dataToDisplay = {'hr' : 0,
+                              'yaw_t' : 0,
+                              'pitch_t:' : 0,
+                              'roll_t' : 0,
+                              'yaw_c' : 0,
+                              'pitch_c:' : 0,
+                              'roll_c' : 0
+                              }
         #set signals
         self.set_signals()
 
@@ -92,6 +99,58 @@ class MainTherapyWin(QtWidgets.QWidget):
         #roll lcd
         self.rollDisplay['lcd'] = QtWidgets.QLCDNumber(self)
         self.rollDisplay['lcd'].setGeometry(150,270, 100,50)
+
+
+
+        a =300
+        #Yaw angle:
+        self.yawDisplay1 = {}
+        #yaw angle label
+        self.yawDisplay1['name'] = QtWidgets.QLabel(self)
+        self.yawDisplay1['name'].setText("Yaw")
+        self.yawDisplay1['name'].setStyleSheet("font-size:20px; Arial")
+        self.yawDisplay1['name'].setGeometry(50 + a,110, 100,100)
+        #yaw angle units label
+        self.yawDisplay1['units'] = QtWidgets.QLabel(self)
+        self.yawDisplay1['units'].setText("Deg")
+        self.yawDisplay1['units'].setStyleSheet("font-size:20px; Arial")
+        self.yawDisplay1['units'].setGeometry(280 + a,110, 100,100)
+        #yaw lcd
+        self.yawDisplay1['lcd'] = QtWidgets.QLCDNumber(self)
+        self.yawDisplay1['lcd'].setGeometry(150 + a,130, 100,50)
+        #pitch angle:
+        self.pitchDisplay1 = {}
+        #pitch angle label
+        self.pitchDisplay1['name'] = QtWidgets.QLabel(self)
+        self.pitchDisplay1['name'].setText("Pitch")
+        self.pitchDisplay1['name'].setStyleSheet("font-size:20px; Arial")
+        self.pitchDisplay1['name'].setGeometry(50 + a,180, 100,100)
+        #pitch angle units label
+        self.pitchDisplay1['units'] = QtWidgets.QLabel(self)
+        self.pitchDisplay1['units'].setText("Deg")
+        self.pitchDisplay1['units'].setStyleSheet("font-size:20px; Arial")
+        self.pitchDisplay1['units'].setGeometry(280 + a, 180, 100, 100)
+        #pitch lcd
+        self.pitchDisplay1['lcd'] = QtWidgets.QLCDNumber(self)
+        self.pitchDisplay1['lcd'].setGeometry(150 + a, 200, 100, 50)
+        #roll angle:
+        self.rollDisplay1 = {}
+        #roll angle label
+        self.rollDisplay1['name'] = QtWidgets.QLabel(self)
+        self.rollDisplay1['name'].setText("Roll")
+        self.rollDisplay1['name'].setStyleSheet("font-size:20px; Arial")
+        self.rollDisplay1['name'].setGeometry(50+a, 250, 100,100)
+        #roll angle units label
+        self.rollDisplay1['units'] = QtWidgets.QLabel(self)
+        self.rollDisplay1['units'].setText("Deg")
+        self.rollDisplay1['units'].setStyleSheet("font-size:20px; Arial")
+        self.rollDisplay1['units'].setGeometry(280 +a , 250, 100,100)
+        #roll lcd
+        self.rollDisplay1['lcd'] = QtWidgets.QLCDNumber(self)
+        self.rollDisplay1['lcd'].setGeometry(150+a ,270, 100,50)
+
+
+
         #----------------------------------
 
         #----------buttons config----------
@@ -110,7 +169,7 @@ class MainTherapyWin(QtWidgets.QWidget):
         self.controlButtons['stop'].setStyleSheet("font-size:20px; Arial")
         self.controlButtons['stop'].setIcon(QtGui.QIcon('gui/img/stop'))
         self.controlButtons['stop'].setIconSize(QSize(40,40))
-        self.controlButtons['start'].setEnabled(False)
+        self.controlButtons['stop'].setEnabled(False)
         #----------------------------------
         #
         self.LabelPosture=QtWidgets.QLabel(self)
@@ -153,18 +212,40 @@ class MainTherapyWin(QtWidgets.QWidget):
         #lock start button
         self.controlButtons['start'].setEnabled(False)
         self.controlButtons['stop'].setEnabled(True)
-        self.update_display_data(d = {'hr' : 1, 'yaw' : 2, 'pitch' : 3, 'roll' : 4})
+        self.update_display_data(d = {
+                                        'hr' : 1,
+                                        'yaw_t' : 2,
+                                        'pitch_t' : 3,
+                                        'roll_t' : 4,
+                                        'yaw_c' : 5,
+                                        'pitch_c' : 6,
+                                        'roll_c' : 7
+                                        }
+                                )
         self.Borg.j = 4
         self.Borg.move()
 
     def display_data(self):
 
         self.hrDisplay['lcd'].display(self.dataToDisplay['hr'])
-        self.yawDisplay['lcd'].display(self.dataToDisplay['yaw'])
-        self.pitchDisplay['lcd'].display(self.dataToDisplay['pitch'])
-        self.rollDisplay['lcd'].display(self.dataToDisplay['roll'])
+        self.yawDisplay['lcd'].display(self.dataToDisplay['yaw_t'])
+        self.pitchDisplay['lcd'].display(self.dataToDisplay['pitch_t'])
+        self.rollDisplay['lcd'].display(self.dataToDisplay['roll_t'])
+        self.yawDisplay1['lcd'].display(self.dataToDisplay['yaw_c'])
+        self.pitchDisplay1['lcd'].display(self.dataToDisplay['pitch_c'])
+        self.rollDisplay1['lcd'].display(self.dataToDisplay['roll_c'])
 
-    def update_display_data(self, d = {'hr' : 0, 'yaw' : 0, 'pitch' : 0, 'roll' : 0}):
+    def update_display_data(self,
+                            d = {
+                                'hr' : 0,
+                                'yaw_t' : 0,
+                                'pitch_t' : 0,
+                                'roll_t' : 0,
+                                'yaw_c' : 0,
+                                'pitch_c:' : 0,
+                                'roll_c' : 0
+                                }
+                            ):
         self.dataToDisplay =  d
         self.onData.emit()
 
@@ -173,7 +254,16 @@ class MainTherapyWin(QtWidgets.QWidget):
         self.controlButtons['start'].setEnabled(True)
         self.controlButtons['stop'].setEnabled(False)
         print('stop clicked')
-        self.update_display_data(d = {'hr' : 0, 'yaw' : 0, 'pitch' : 0, 'roll' : 0})
+        self.update_display_data(d = {
+                                        'hr' : 0,
+                                        'yaw_t' : 0,
+                                        'pitch_t' : 0,
+                                        'roll_t' : 0,
+                                        'yaw_c' : 0,
+                                        'pitch_c' : 0,
+                                        'roll_c' : 0
+                                        }
+                                        )
         self.Borg.j = 2
         self.Borg.move()
 
