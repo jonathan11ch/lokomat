@@ -5,7 +5,10 @@ import time
 import threading
 
 #import sensors
-import sensors as sensors
+if __name__== "__main__":
+    import sensors as sensors
+else:
+    import lib.sensors as sensors
 
 import logging
 logging.basicConfig(level = logging.DEBUG, format = '[%(levelname)s] (%(threadName)-9s) %(message)s',)

@@ -41,7 +41,7 @@ class LokomatInterface(object):
             self.manager.set_sensors(ecg = False, imu1 = True, imu2 = True )
 
             #threads
-            self.SensorUpdateThread(f = self.sensor_update, sample = 1)
+            self.SensorUpdateThread = SensorUpdateThread(f = self.sensor_update, sample = 1)
 
 
         #BOOL
@@ -67,7 +67,9 @@ class LokomatInterface(object):
     def sensor_update(self):
 
         if self.settings['UseSensors']:
-            data = self.manager.update_data()
+            self.manager.update_data()
+            data = self.manager.get_data()
+            print(data)
             self.therapy_win.update_display_data(d = {
                                                         'hr' : data['ecg']['hr'],
                                                         'yaw_t' : data['imu1']['yaw'],
@@ -84,19 +86,19 @@ class LokomatInterface(object):
 class SensorUpdateThread(QtCore.QThread):
 
      def __init__(self, parent = None, f = None, sample = 1):
-        super(SensorUpdateThread,self).__init__(self, parent)
+        super(SensorUpdateThread,self).__init__()
         self.f = f
         self.Ts = sample
         self.ON = True
 
-    def run(self):
+     def run(self):
 
         if self.f:
             while self.ON:
                 self.f()
-                self.time.sleep(self.Ts)
+                time.sleep(self.Ts)
 
-    def shutdown(self):
+     def shutdown(self):
         self.ON = False
 
 

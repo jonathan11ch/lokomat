@@ -7,8 +7,12 @@ import time
 import imu_sensor as IMU
 import ecg_sensor as ECG
 '''
-import IMU_BNO055_rpi as IMU
-import ecg_sensor as ECG
+if __name__== "__main__":
+    import IMU_BNO055_rpi as IMU
+    import ecg_sensor as ECG
+else:
+    import lib.IMU_BNO055_rpi as IMU
+    import lib.ecg_sensor as ECG
 
 import threading
 
@@ -94,26 +98,27 @@ class Manager(object):
 		if self.ECG_ON:
 			ecg = self.ecg.get_data()
 		else:
-			ecg = None
+			ecg = {'hr' : 0}
 
 		if self.IMU1_ON:
 			imu1 = self.imu1.get_data()
+               
 			#print 'imu data updated: ' + str(imu)
 		else:
-			imu1 = None
+			imu1 = {'yaw' : 0, 'pitch' : 0,'roll' : 0}
 
 		if self.IMU2_ON:
 			imu2 = self.imu2.get_data()
 			#print 'imu data updated: ' + str(imu)
 		else:
-			imu2 = None
+			imu2 = {'yaw' : 0, 'pitch' : 0,'roll' : 0}
 
 		self.data = {'ecg': ecg, 'imu1': imu1, 'imu2': imu2 }
 
 
 	def get_data(self):
-		#print('data returned : ' + str(self.data))
-		return self.data
+          print('data returned : ' + str(self.data))
+          return self.data
 
 
 	def shutdown(self):

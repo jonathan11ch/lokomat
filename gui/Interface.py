@@ -181,9 +181,9 @@ class MainTherapyWin(QtWidgets.QWidget):
         self.LabelTitle.setText("Posture Behavior")
         self.LabelTitle.setStyleSheet("font-size:20px ;Arial")
         #self.Stop.setIconSize(QSize(800,500))
-        self.LabelPosture1=QtWidgets.QLabel(self)
-        self.LabelPosture1.setGeometry(340,100,400,300)
-        self.LabelPosture1.setPixmap(QtGui.QPixmap('gui/img/cervical'))
+        #self.LabelPosture1=QtWidgets.QLabel(self)
+        #self.LabelPosture1.setGeometry(340,100,400,300)
+        #self.LabelPosture1.setPixmap(QtGui.QPixmap('gui/img/cervical'))
 
         #create borgscale button
         self.Borg = BorgButton(self)
