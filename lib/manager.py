@@ -97,28 +97,34 @@ class Manager(object):
 	def update_data(self):
 		if self.ECG_ON:
 			ecg = self.ecg.get_data()
+			if not ecg:
+				ecg = {'hr' : 0}
+
 		else:
 			ecg = {'hr' : 0}
 
 		if self.IMU1_ON:
 			imu1 = self.imu1.get_data()
-               
+			if not imu1:
+				imu1 = {'yaw' : 0, 'pitch' : 0, 'roll' : 0}
 			#print 'imu data updated: ' + str(imu)
 		else:
-			imu1 = {'yaw' : 0, 'pitch' : 0,'roll' : 0}
+			imu1 = {'yaw' : 0, 'pitch' : 0, 'roll' : 0}
 
 		if self.IMU2_ON:
 			imu2 = self.imu2.get_data()
+			if not imu2:
+				imu2 = {'yaw' : 0, 'pitch' : 0, 'roll' : 0}
 			#print 'imu data updated: ' + str(imu)
 		else:
-			imu2 = {'yaw' : 0, 'pitch' : 0,'roll' : 0}
+			imu2 = {'yaw' : 0, 'pitch' : 0, 'roll' : 0}
 
 		self.data = {'ecg': ecg, 'imu1': imu1, 'imu2': imu2 }
 
 
 	def get_data(self):
-          print('data returned : ' + str(self.data))
-          return self.data
+         print('data returned : ' + str(self.data))
+         return self.data
 
 
 	def shutdown(self):
@@ -144,7 +150,7 @@ def main():
 	manager.set_sensors(ecg = False, imu1 = True, imu2 = True )
 	manager.launch_sensors()
 	manager.play_sensors()
-	print('waiting.. ..')
+	print('waiting...')
 	time.sleep(5)
 	for i in range(10):
 		manager.update_data()

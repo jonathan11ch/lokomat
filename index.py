@@ -90,7 +90,7 @@ class SensorUpdateThread(QtCore.QThread):
         self.f = f
         self.Ts = sample
         self.ON = True
-
+        
      def run(self):
 
         if self.f:
