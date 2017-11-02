@@ -59,13 +59,13 @@ class RobotController(object):
 
         self.go_on = True
         
-        print 'b'
+        print('b')
         myBroker = ALBroker("myBroker", "0.0.0.0", 0, self.ip, self.port)
         #self.module = RobotModule( name = 'module')
 
         self.session.connect("tcp://" + self.ip + ":" + str(self.port))
 
-        print 'vv'
+        print('vv')
 
         self.tts = self.session.service("ALTextToSpeech")
         self.setLanguage('Spanish')
@@ -120,13 +120,14 @@ class RobotController(object):
 
     def get_data(self, data):
         self.ecg = data['ecg']
-        self.angles = data['imu']
+        self.angles1 = data['imu1']
+        self.angles2 = data['imu2']
 
 
-        if self.ecg > self.hr:
+        if self.ecg['hr'] > self.hr:
             self.say(self.hrIsUpSentence)
 
-        if self.angles[0] < 90:
+        if self.angles1['yaw'] < 90:
             self.say(self.postureCorrectionSentence)
 
         
@@ -145,7 +146,7 @@ def main():
     nao.set_sentences()
     nao.set_limits()
 
-    print 'x'
+    print('x')
 
 #    nao.connect_to_robot()
 
@@ -157,15 +158,15 @@ def main():
     def process(nao):
         go_on = True
         while go_on:
-            print '.....'
+            print('.....')
             a = random.random()
             cont = 10 * a
             data = {'ecg': 100*cont, 'imu': [cont, cont, cont] }
-            print data
+            print (data)
             nao.get_data(data)
             time.sleep(5)
 
-    print 'a'  
+    print('a')  
     threading.Thread(target  = process , args =(nao,)).start()
 
     try:
