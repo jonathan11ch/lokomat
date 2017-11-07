@@ -1,40 +1,37 @@
-import PyQt5
-from PyQt5 import QtWidgets,QtGui,QtCore
+# -*- coding: utf-8 -*-import sys
 import sys
-from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QImage, QPalette, QBrush
-from PyQt5.QtWidgets import *
+from PyQt4 import QtGui, QtCore
+from PyQt4.QtCore import*
+from PyQt4.QtGui import*
 
-class MainTherapyWin(QtWidgets.QWidget):
-    onData = QtCore.pyqtSignal()
-    onJoy = QtCore.pyqtSignal()
+class MainTherapy(QtGui.QMainWindow):
+    onData=QtCore.pyqtSignal()
+    onJoy=QtCore.pyqtSignal()
     def __init__(self):
-        super().__init__()
+        super(MainTherapy,self).__init__()
         self.init_ui()
 
-        self.dataToDisplay = {'hr' : 0,
-                              'yaw_t' : 0,
-                              'pitch_t:' : 0,
-                              'roll_t' : 0,
-                              'yaw_c' : 0,
-                              'pitch_c:' : 0,
-                              'roll_c' : 0
-                              }
+        self.dataToDisplay={'hr':0,
+                            'yaw_t':0,
+                            'pitch_t':0,
+                            'roll_t':0,
+                            'yaw_v':0,
+                            'pitch_v':0,
+                            'roll_v':0
+                            }
         #set signals
         self.set_signals()
-
-        #self.j = None
-
     def init_ui(self):
-        #-----------main config-----------
+        #-------main config-------
         #Window title
         self.setWindowTitle("Lokomat therapy")
         #Window size
         self.setGeometry(100,100,1000,580)#Tamaño de la ventana
+        
         #setting backgroung image
         Image=QImage("gui/img/Int.jpg")
         sImage=Image.scaled(1000,700,QtCore.Qt.KeepAspectRatio, transformMode=QtCore.Qt.SmoothTransformation)
-        palette=QPalette()
+        palette=QtGui.QPalette()
         palette.setBrush(10, QBrush(sImage))
         self.setPalette(palette)
         #----------------------------------
@@ -42,61 +39,60 @@ class MainTherapyWin(QtWidgets.QWidget):
         #Heart rate:
         self.hrDisplay = {}
         #heart rate lcd
-        self.hrDisplay['lcd'] = QtWidgets.QLCDNumber(self)
+        self.hrDisplay['lcd'] = QtGui.QLCDNumber(self)
         self.hrDisplay['lcd'].setGeometry(120,95, 120,30)
         #Yaw angle:
         self.yawDisplay = {}
         #yaw angle label
-        self.yawDisplay['name'] = QtWidgets.QLabel(self)
+        self.yawDisplay['name'] = QtGui.QLabel(self)
         self.yawDisplay['name'].setText("Yaw")
         self.yawDisplay['name'].setStyleSheet("font-size:15px; Arial")
         self.yawDisplay['name'].setGeometry(120,125, 100,50)
         #yaw lcd
-        self.yawDisplay['lcd'] = QtWidgets.QLCDNumber(self)
+        self.yawDisplay['lcd'] = QtGui.QLCDNumber(self)
         self.yawDisplay['lcd'].setGeometry(100,165, 50,30)
         #pitch angle:
         self.pitchDisplay = {}
         #pitch angle label
-        self.pitchDisplay['name'] = QtWidgets.QLabel(self)
+        self.pitchDisplay['name'] = QtGui.QLabel(self)
         self.pitchDisplay['name'].setText("Pitch")
         self.pitchDisplay['name'].setStyleSheet("font-size:15px; Arial")
         self.pitchDisplay['name'].setGeometry(175,125, 100,50)
         #pitch lcd
-        self.pitchDisplay['lcd'] = QtWidgets.QLCDNumber(self)
+        self.pitchDisplay['lcd'] = QtGui.QLCDNumber(self)
         self.pitchDisplay['lcd'].setGeometry(160,165, 50,30)
         #roll angle:
         self.rollDisplay = {}
         #roll angle label
-        self.rollDisplay['name'] = QtWidgets.QLabel(self)
+        self.rollDisplay['name'] = QtGui.QLabel(self)
         self.rollDisplay['name'].setText("Roll")
         self.rollDisplay['name'].setStyleSheet("font-size:15px; Arial")
         self.rollDisplay['name'].setGeometry(230,125, 100,50)
         #roll lcd
-        self.rollDisplay['lcd'] = QtWidgets.QLCDNumber(self)
+        self.rollDisplay['lcd'] = QtGui.QLCDNumber(self)
         self.rollDisplay['lcd'].setGeometry(220,165, 50,30)
         #Therapy time lcd
         self.TtimeDisplay = {}
-        self.TtimeDisplay['lcd'] = QtWidgets.QLCDNumber(self)
+        self.TtimeDisplay['lcd'] = QtGui.QLCDNumber(self)
         self.TtimeDisplay['lcd'].setGeometry(865,45, 100,50)
-
-
+     
         #a =300
         #Yaw angle:
         self.yawDisplay1 = {}
 
         #yaw lcd
-        self.yawDisplay1['lcd'] = QtWidgets.QLCDNumber(self)
+        self.yawDisplay1['lcd'] = QtGui.QLCDNumber(self)
         self.yawDisplay1['lcd'].setGeometry(100,235, 50,30)
         #pitch angle:
         self.pitchDisplay1 = {}
         #pitch lcd
-        self.pitchDisplay1['lcd'] = QtWidgets.QLCDNumber(self)
+        self.pitchDisplay1['lcd'] = QtGui.QLCDNumber(self)
         self.pitchDisplay1['lcd'].setGeometry(160, 235, 50, 30)
         #roll angle:
         self.rollDisplay1 = {}
 
         #roll lcd
-        self.rollDisplay1['lcd'] = QtWidgets.QLCDNumber(self)
+        self.rollDisplay1['lcd'] = QtGui.QLCDNumber(self)
         self.rollDisplay1['lcd'].setGeometry(220,235, 50,30)
 
 
@@ -106,7 +102,7 @@ class MainTherapyWin(QtWidgets.QWidget):
         #----------buttons config----------
         #setting background start image
         
-        self.start=QtWidgets.QLabel(self)
+        self.start=QtGui.QLabel(self)
         self.start.setGeometry(885,165,55,55)
         Icon3=QtGui.QPixmap("gui/img/play.png")
         Icon_resize3= Icon3.scaled(55,55,QtCore.Qt.KeepAspectRatio, transformMode=QtCore.Qt.SmoothTransformation)
@@ -114,7 +110,7 @@ class MainTherapyWin(QtWidgets.QWidget):
         
         #setting background start image
         
-        self.stop=QtWidgets.QLabel(self)
+        self.stop=QtGui.QLabel(self)
         self.stop.setGeometry(885,235,55,55)
         Icon4=QtGui.QPixmap("gui/img/stop.png")
         Icon_resize5= Icon4.scaled(55,55,QtCore.Qt.KeepAspectRatio, transformMode=QtCore.Qt.SmoothTransformation)
@@ -122,13 +118,13 @@ class MainTherapyWin(QtWidgets.QWidget):
         
         self.controlButtons = {}
         #start button
-        self.controlButtons['start'] = QtWidgets.QCommandLinkButton(self)
+        self.controlButtons['start'] = QtGui.QCommandLinkButton(self)
         self.controlButtons['start'].setIconSize(QSize(0,0))
         #self.controlButtons['start'].setText("Start")
         self.controlButtons['start'].setGeometry(885,165,55,55)
         
         
-        self.controlButtons['stop'] = QtWidgets.QCommandLinkButton(self)
+        self.controlButtons['stop'] = QtGui.QCommandLinkButton(self)
         self.controlButtons['stop'].setText("Stop")
         self.controlButtons['stop'].setGeometry(885,235,55,55)
         #self.controlButtons['stop'].setIcon(QtGui.QIcon('gui/img/stop'))
@@ -235,7 +231,7 @@ class BorgButton(object):
         self.cursorStatus = 0
         self.j = None
         #setting background Label Borgº
-        self.Labelborg=QtWidgets.QLabel(self.window)
+        self.Labelborg=QtGui.QLabel(self.window)
         self.Labelborg.setGeometry(25,465,730,55)
         Icon2=QtGui.QPixmap("gui/img/borgh")
         Icon_resize= Icon2.scaled(730,55)
@@ -253,28 +249,13 @@ class BorgButton(object):
         h = hp
         w = wp
         for i in range(15):
-            #print ('button created')
-            #self.Borg.append(QtWidgets.QCommandLinkButton(self.window))
-            self.Borg.append(QtWidgets.QLabel(self.window))
-            #self.Borg[-1].setIconSize(QSize(0, 0))
+            self.Borg.append(QtGui.QLabel(self.window))
             Icon2=QtGui.QPixmap("gui/img/l" + str(i))
             Icon_resize= Icon2.scaled(h,w)
             self.Borg[-1].setPixmap(Icon_resize)
             self.Borg[-1].setGeometry(x,y,h,w)
             x = x + e
-            '''
-            if i < 2:
-                self.Borg.append(QtWidgets.QCommandLinkButton(self.window))
-                self.Borg[-1].setIconSize(QSize(0, 0))
-                self.Borg[-1].setGeometry(x,y,h,w)
-                x = x + e
-
-            else:
-                self.Borg.append(QtWidgets.QCommandLinkButton(self.window))
-                self.Borg[-1].setIconSize(QSize(0, 0))
-                self.Borg[-1].setGeometry(x,y,h-1,w)
-                x = x + e
-            '''
+            
 
         self.set_cursor(0)
 
@@ -307,4 +288,3 @@ if __name__ == '__main__':
     GUI=MainTherapyWin()
     sys.exit(app.exec_())
 
-#M=run()
