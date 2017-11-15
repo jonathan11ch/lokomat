@@ -4,11 +4,11 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import*
 from PyQt4.QtGui import*
 
-class MainTherapy(QtGui.QMainWindow):
+class MainTherapyWin(QtGui.QMainWindow):
     onData=QtCore.pyqtSignal()
     onJoy=QtCore.pyqtSignal()
     def __init__(self):
-        super(MainTherapy,self).__init__()
+        super(MainTherapyWin,self).__init__()
         self.init_ui()
 
         self.dataToDisplay={'hr':0,
@@ -265,11 +265,11 @@ class BorgButton(object):
         self.cursorStatus = p
 
     def move(self):
-
-        if self.j == 4:
+        print('MOVE FUNCTION ON')
+        if self.j == '4':
             if self.cursorStatus < 14:
                 self.set_cursor(self.cursorStatus + 1)
-        elif self.j ==2:
+        elif self.j =='2':
             if self.cursorStatus > 0:
                 self.set_cursor(self.cursorStatus -1)
 
@@ -284,7 +284,7 @@ class BorgButton(object):
 
 
 if __name__ == '__main__':
-    app=QtWidgets.QApplication(sys.argv)
+    app=QtGui.QApplication(sys.argv)
     GUI=MainTherapyWin()
     sys.exit(app.exec_())
 

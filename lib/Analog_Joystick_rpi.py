@@ -64,20 +64,24 @@ class Analog_Joystick(object):
         return self.Position
 
 class JoyHandler(Analog_Joystick):
-    def __init__(self, sample = 1, gui = None):
+    def __init__(self, sample = 1, man = None):
         super(JoyHandler, self).__init__()
         self.Ts  = sample
         self.ON  = True
         self.data = {}
-        self.therapy_win = gui
+        self.man = man
+
 
 
     def process(self):
         while self.ON:
-            self.data = self.Channel_data()
+            self.data = self.Channel_data()  
+            self.man.data['joy'] = self.data           
+            '''
             if self.therapy_win:
                 self.therapy_win.Borg.j = self.data['x']
                 self.therapy_win.onJoy.emit()
+            '''
             time.sleep(self.Ts)
 
     def launch_thread(self):

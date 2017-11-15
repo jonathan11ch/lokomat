@@ -1,7 +1,5 @@
 
 import os
-print('jummm')
-print(os.getcwd())
 import time
 '''
 import imu_sensor as IMU
@@ -11,26 +9,29 @@ if __name__== "__main__":
     import IMU_BNO055_rpi as IMU
     import ecg_sensor as ECG
 else:
-    import lib.IMU_BNO055_rpi as IMU
-    import lib.ecg_sensor as ECG
+    import IMU_BNO055_rpi as IMU
+    import ecg_sensor as ECG
 
 import threading
 
 class Manager(object):
+	
 	def __init__(self,
 				 imu1_settings = {'port': 0x28, 'sample': 1, 'bus': 1},
 				 imu2_settings = {'port': 0x29, 'sample': 1, 'bus': 1},
 				 ecg_settings = {'port': 'COM3', 'sample': 1}
 				 ):
 
-		self.ECG_ON = False
+		self.ECG_ON  = False
 		self.IMU1_ON = False
 		self.IMU2_ON = False
 
-		self.data = {'ecg': {'hr' : 0},
+		self.data = {
+		             'ecg': {'hr' : 0},
 		 			 'imu1': {'yaw' : 0, 'pitch' : 0,'roll' : 0},
 		 			 'imu2': {'yaw' : 0, 'pitch' : 0,'roll' : 0}
 					}
+
 		self.imu1_settings = imu1_settings
 		self.imu2_settings = imu2_settings
 		self.ecg_settings = ecg_settings
@@ -80,15 +81,17 @@ class Manager(object):
 			threading.Thread(target = self.ecg.process).start()
 
 	def play_sensors(self):
+
 		#start acquiring data
 		if self.ECG_ON:
 			self.ecg.play()
 
-
+		
 		if self.IMU1_ON:
 			self.imu1.play()
 			print ('imu1 played')
 
+		
 		if self.IMU2_ON:
 			self.imu2.play()
 			print ('imu2 played')
